@@ -1,8 +1,6 @@
 import socket
 import threading
-from dotenv import load_dotenv
 from config import Config
-
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((Config.HOST,Config.PORT))
@@ -26,7 +24,7 @@ def handle_clients(client):
             clients.remove(index)
             client.close()
             nickname = nicknames[index]
-            print(f'{nickname} has left the chat!'.encode('ascii'))
+            print(f'{nickname} has left the chat!'.encode('utf-8'))
             nicknames.remove(nickname)
             break
 
@@ -36,14 +34,14 @@ def receive_connection():
         client , address = server.accept()
         print(f'Connected with address {address}')
 
-        client.send('NICK'.encode('ascii'))
-        nickname = client.recv(1024).decode('ascii')
+        client.send('NICK'.encode('utf-8'))
+        nickname = client.recv(1024).decode('utf-8')
         nicknames.append(nickname)
         clients.append(client)
 
         print(f'Nickname of the client is {nickname}')
-        broadcast(f'{nickname} joined the chat'.encode('ascii'))
-        client.send('connected to server'.encode('ascii'))
+        broadcast(f'{nickname} joined the chat'.encode('utf-8'))
+        client.send('connected to server'.encode('utf-8'))
 
         thread = threading.Thread( target = handle_clients, args = client )
         thread.start()
