@@ -20,8 +20,8 @@ def handle_clients(client):
             message = client.recv(1024)
             broadcast(message)
         except:
-            index = client.index(client)
-            clients.remove(index)
+            index = clients.index(client)
+            clients.remove(client)
             client.close()
             nickname = nicknames[index]
             print(f'{nickname} has left the chat!'.encode('utf-8'))
@@ -41,9 +41,9 @@ def receive_connection():
 
         print(f'Nickname of the client is {nickname}')
         broadcast(f'{nickname} joined the chat'.encode('utf-8'))
-        client.send('connected to server'.encode('utf-8'))
+        client.send(f'{nickname} welcome to the chat'.encode('utf-8'))
 
-        thread = threading.Thread( target = handle_clients, args = client )
+        thread = threading.Thread( target = handle_clients, args = (client,) )
         thread.start()
 
 

@@ -15,9 +15,20 @@ def connect_server():
             if message == 'NICK':
                 client.send(nickname.encode('utf-8'))
             else:
-                print(f'{message} from server received')
+                print(f'{message}')
 
         except Exception as error:
             print(f'an error ocurred {error}')
             client.close()
             break
+
+def write_message():
+    while True:
+        message = f'{nickname}: { input("") }'
+        client.send(message.encode('utf-8'))
+
+receive_thread = threading.Thread(target=connect_server)
+receive_thread.start()
+
+write_thread = threading.Thread(target=write_message)
+write_thread.start()
